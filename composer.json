@@ -1,0 +1,12 @@
+{
+    "name": "vagrant/giftmaker",
+    "description": "crrate gift",
+    "authors": [
+        {
+            "name": "matteo"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^2.1"
+    }
+}

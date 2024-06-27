@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caricamento file XLSX e conversione in GIFT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        #drop_zone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Carica un file XLSX per convertirlo in formato GIFT</h2>
+    <div id="drop_zone">
+        Trascina e rilascia qui il file XLSX<br>
+        oppure <input type="file" id="file_input" accept=".xlsx">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropZone = document.getElementById('drop_zone');
+
+            // Aggiungi gestore per il trascinamento del file
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#f0f0f0';
+            });
+
+            dropZone.addEventListener('dragleave', function() {
+                dropZone.style.backgroundColor = '';
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '';
+
+                var file = e.dataTransfer.files[0];
+                handleFile(file);
+            });
+
+            // Aggiungi gestore per il caricamento del file tramite input file
+            document.getElementById('file_input').addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                handleFile(file);
+            });
+
+            function handleFile(file) {
+                if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                    var formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('guerna.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        alert(result);
+                    })
+                    .catch(error => {
+                        console.error('Errore durante il caricamento:', error);
+                    });
+                } else {
+                    alert('Carica solo file XLSX.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
